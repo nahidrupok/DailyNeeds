@@ -1,13 +1,11 @@
 <?php
 session_start();
 
-// 1. Protection: If the user is not logged in, kick them back to the login page
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header("Location: login.php");
     exit();
 }
 
-// 2. Get data from session
 $userName  = $_SESSION['user_name'];
 $userEmail = $_SESSION['user_email'];
 $userRole  = $_SESSION['user_role'];

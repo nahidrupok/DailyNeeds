@@ -1,5 +1,4 @@
 <?php 
-// 1. Start the session to access stored errors
 session_start(); 
 ?>
 <!DOCTYPE html>
@@ -10,7 +9,6 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | DailyNeeds</title>
     <style>
-        /* CSS Variables */
         :root {
             --primary-green: #27ae60;
             --dark-text: #2c3e50;
@@ -34,7 +32,6 @@ session_start();
             min-height: 100vh;
         }
 
-        /* --- HEADER --- */
         nav {
             display: flex;
             justify-content: space-between;
@@ -69,7 +66,6 @@ session_start();
             font-weight: 500;
         }
 
-        /* --- FORM SECTION --- */
         .reg-wrapper {
             flex: 1;
             display: flex;
@@ -90,7 +86,6 @@ session_start();
         .reg-card h2 { text-align: center; margin-bottom: 10px; }
         .reg-card p { text-align: center; color: #777; margin-bottom: 20px; font-size: 0.9rem; }
 
-        /* --- ERROR MESSAGE DIV --- */
         #error-message {
             background-color: #fdeded;
             color: var(--error-red);
@@ -99,7 +94,6 @@ session_start();
             border: 1px solid var(--error-red);
             margin-bottom: 20px;
             font-size: 0.85rem;
-            /* PHP logic to show/hide based on session */
             display: <?php echo isset($_SESSION['error']) ? 'block' : 'none'; ?>;
             text-align: center;
             font-weight: 600;
@@ -147,11 +141,11 @@ session_start();
 <body>
 
     <nav>
-        <a href="../index.html" class="logo">DailyNeeds</a>
+        <a href="../index.php" class="logo">DailyNeeds</a>
         <ul class="nav-links">
-            <li><a href="products.html">Products</a></li>
+            <li><a href="products.php">Products</a></li>
             <li><a href="login.php">Login</a></li>
-            <li><a href="register.php" style="background: var(--primary-green); color: white; padding: 8px 18px; border-radius: 5px;">Register</a></li>
+            <li><a href="registeration.php" style="background: var(--primary-green); color: white; padding: 8px 18px; border-radius: 5px;">Register</a></li>
         </ul>
     </nav>
 
@@ -164,7 +158,7 @@ session_start();
                 <?php 
                 if (isset($_SESSION['error'])) {
                     echo $_SESSION['error'];
-                    unset($_SESSION['error']); // Clear error after showing it once
+                    unset($_SESSION['error']); 
                 }
                 ?>
             </div>
@@ -203,7 +197,6 @@ session_start();
         const errorDiv = document.getElementById('error-message');
 
         form.addEventListener('submit', function (e) {
-            // JS handles instant validation
             const name = document.getElementById('fullname').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
@@ -222,7 +215,6 @@ session_start();
             }
 
             if (errorMessage !== "") {
-                // If JS validation fails, stop the form and show the error
                 e.preventDefault(); 
                 errorDiv.innerHTML = errorMessage;
                 errorDiv.style.display = 'block';

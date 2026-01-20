@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DailyNeeds | Fresh Groceries Delivered</title>
     <style>
-        /* CSS Variables */
         :root {
             --primary-green: #27ae60;
             --dark-text: #2c3e50;
@@ -25,7 +24,6 @@
             color: var(--dark-text);
         }
 
-        /* Navbar */
         nav {
             display: flex;
             justify-content: space-between;
@@ -67,7 +65,6 @@
             color: var(--primary-green);
         }
 
-        /* Banner */
         .hero {
             height: 60vh;
             background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 

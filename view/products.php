@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DailyNeeds | All Products</title>
     <style>
-        /* Simplified Styling */
+       
         body {
             margin: 0;
             font-family: sans-serif;
@@ -15,7 +15,7 @@
             min-height: 100vh;
         }
 
-        /* Navbar */
+       
         nav {
             background: #fff;
             padding: 15px 5%;
@@ -31,7 +31,7 @@
         
         .nav-links a { text-decoration: none; color: #333; font-weight: 600; }
 
-        /* Search Area */
+        
         .search-box {
             background: #27ae60;
             padding: 30px;
@@ -47,7 +47,7 @@
             font-size: 16px;
         }
 
-        /* Product Grid */
+        
         .content {
             padding: 20px 5%;
             flex: 1;
@@ -67,7 +67,7 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        /* Placeholder for images to ensure they show up */
+        
         .img-placeholder {
             width: 100%;
             height: 150px;
@@ -105,9 +105,9 @@
 <body>
 
     <nav>
-        <a href="index.html" class="logo">DailyNeeds</a>
+        <a href="index.php" class="logo">DailyNeeds</a>
         <div class="nav-links">
-            <a href="products.html">Products</a>
+            <a href="products.php">Products</a>
             <a href="#">Login</a>
             <a href="#">Register</a>
         </div>

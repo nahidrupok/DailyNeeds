@@ -8,10 +8,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email    = trim($_POST['email']);
     $password = $_POST['password'];
 
-    // Validation
     if (empty($fullName) || empty($email) || empty($password)) {
         $_SESSION['error'] = "Please fill in all fields.";
-        header("Location: ../view/register.php"); // Change to .php
+        header("Location: ../view/register.php"); 
         exit();
     }
 

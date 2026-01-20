@@ -28,7 +28,7 @@
             min-height: 100vh;
         }
 
-        /* --- HEADER --- */
+       
         nav {
             display: flex;
             justify-content: space-between;
@@ -46,7 +46,7 @@
             text-decoration: none;
         }
 
-        /* --- DASHBOARD LAYOUT --- */
+        
         .dashboard-container {
             display: flex;
             flex: 1;
@@ -98,7 +98,7 @@
             border-bottom: 2px solid var(--light-bg);
         }
 
-        /* --- CART TABLE STYLING --- */
+       
         .table-container {
             width: 100%;
             overflow-x: auto;
@@ -139,7 +139,7 @@
             background-color: #219150;
         }
 
-        /* --- FOOTER --- */
+        
         footer {
             background: #1a1a1a;
             color: white;

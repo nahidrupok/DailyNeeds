@@ -36,7 +36,6 @@ function CheckUserLogin($email, $password) {
     global $conn;
 
     $email = mysqli_real_escape_string($conn, $email);
-    // Escape password too if you aren't hashing, to prevent SQL injection
     $password = mysqli_real_escape_string($conn, $password); 
 
     $query = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
@@ -45,7 +44,6 @@ function CheckUserLogin($email, $password) {
     if (mysqli_num_rows($result) > 0) {
         $user = mysqli_fetch_assoc($result);
 
-        // CHANGE THIS LINE: Compare plain text directly
         if ($password === $user['password']) { 
             
             if ($user['status'] === 'locked') {
