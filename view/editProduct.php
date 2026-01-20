@@ -103,7 +103,7 @@ $existingPrice = 2.99;
 <body>
 
     <nav>
-        <a href="customerProfile.php" class="logo">DailyNeeds</a>
+        <a href="../index.php" class="logo">DailyNeeds</a>
         <div class="nav-links">
             <a href="../controller/logoutControll.php" class="logout-btn">Logout</a>
         </div>
