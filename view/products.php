@@ -40,11 +40,11 @@ $demoImgBase = "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=f
 <body>
 
     <nav>
-        <a href="index.php" class="logo">DailyNeeds</a>
+        <a href="../index.php" class="logo">DailyNeeds</a>
         <div class="nav-links">
             <a href="products.php">Products</a>
             <a href="login.php">Login</a>
-            <a href="register.php">Register</a>
+            <a href="registration.php">Register</a>
         </div>
     </nav>
 
