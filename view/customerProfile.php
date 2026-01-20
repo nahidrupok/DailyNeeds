@@ -1,3 +1,17 @@
+<?php
+session_start();
+
+// 1. Protection: If the user is not logged in, kick them back to the login page
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    header("Location: login.php");
+    exit();
+}
+
+// 2. Get data from session
+$userName  = $_SESSION['user_name'];
+$userEmail = $_SESSION['user_email'];
+$userRole  = $_SESSION['user_role'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,7 +42,7 @@
             min-height: 100vh;
         }
 
-        /* --- HEADER (Constant) --- */
+        /* --- HEADER --- */
         nav {
             display: flex;
             justify-content: space-between;
@@ -46,14 +60,13 @@
             text-decoration: none;
         }
 
-        /* --- DASHBOARD LAYOUT (2 Columns) --- */
+        /* --- DASHBOARD LAYOUT --- */
         .dashboard-container {
             display: flex;
             flex: 1;
             width: 100%;
         }
 
-        /* Left Column: Sidebar Menu */
         .sidebar {
             width: 250px;
             background: var(--white);
@@ -61,9 +74,7 @@
             padding: 20px 0;
         }
 
-        .sidebar-menu {
-            list-style: none;
-        }
+        .sidebar-menu { list-style: none; }
 
         .sidebar-menu li a {
             display: block;
@@ -81,11 +92,7 @@
             border-left: 4px solid var(--primary-green);
         }
 
-        /* Right Column: Content Area */
-        .main-content {
-            flex: 1;
-            padding: 40px;
-        }
+        .main-content { flex: 1; padding: 40px; }
 
         .content-card {
             background: var(--white);
@@ -100,40 +107,37 @@
             border-bottom: 2px solid var(--light-bg);
         }
 
-        /* Simple Dashboard Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
+        .content-card p { margin-bottom: 10px; font-size: 1.1rem; }
 
-        .stat-box {
-            background: var(--primary-green);
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .stat-box span { font-size: 0.9rem; opacity: 0.9; }
-        .stat-box h3 { font-size: 1.5rem; margin-top: 5px; }
-
-        /* --- FOOTER (Constant) --- */
         footer {
             background: #1a1a1a;
             color: white;
             text-align: center;
             padding: 2rem 0;
         }
+
+        .logout-btn {
+            text-decoration: none;
+            color: #e74c3c;
+            font-weight: 600;
+            padding: 8px 15px;
+            border: 1px solid #e74c3c;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #e74c3c;
+            color: white;
+        }
     </style>
 </head>
 <body>
 
     <nav>
-        <a href="../index.html" class="logo">DailyNeeds</a>
+        <a href="customerProfile.php" class="logo">DailyNeeds</a>
         <div class="nav-links">
-            <a href="login.html" style="text-decoration: none; color: var(--dark-text); font-weight: 500;">Logout</a>
+            <a href="../controller/logoutControll.php" class="logout-btn">Logout</a>
         </div>
     </nav>
 
@@ -149,10 +153,10 @@
 
         <main class="main-content">
             <div class="content-card">
-                <h2>User Profile</h2>
-                <p><strong>Name:</strong> John Doe</p>
-                <p><strong>Email:</strong> john@example.com</p>
-                <p><strong>Account Type:</strong> Customer</p>
+                <h2>Welcome, <?php echo htmlspecialchars($userName); ?>!</h2>
+                <p><strong>Name:</strong> <?php echo htmlspecialchars($userName); ?></p>
+                <p><strong>Email:</strong> <?php echo htmlspecialchars($userEmail); ?></p>
+                <p><strong>Account Type:</strong> <?php echo ucfirst(htmlspecialchars($userRole)); ?></p>
             </div>
         </main>
 

@@ -1,10 +1,16 @@
+<?php 
+// 1. Start the session to access stored errors
+session_start(); 
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | DailyNeeds</title>
+    <title>Register | DailyNeeds</title>
     <style>
+        /* CSS Variables */
         :root {
             --primary-green: #27ae60;
             --dark-text: #2c3e50;
@@ -28,14 +34,14 @@
             min-height: 100vh;
         }
 
-        /* --- NAVBAR --- */
+        /* --- HEADER --- */
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1rem 8%;
             background: var(--white);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -61,11 +67,10 @@
             text-decoration: none;
             color: var(--dark-text);
             font-weight: 500;
-            transition: 0.3s;
         }
 
-        /* --- LOGIN FORM SECTION --- */
-        .login-wrapper {
+        /* --- FORM SECTION --- */
+        .reg-wrapper {
             flex: 1;
             display: flex;
             justify-content: center;
@@ -73,20 +78,17 @@
             padding: 40px 20px;
         }
 
-        .login-card {
+        .reg-card {
             background: var(--white);
             padding: 40px;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             width: 100%;
             max-width: 400px;
         }
 
-        .login-card h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
+        .reg-card h2 { text-align: center; margin-bottom: 10px; }
+        .reg-card p { text-align: center; color: #777; margin-bottom: 20px; font-size: 0.9rem; }
 
         /* --- ERROR MESSAGE DIV --- */
         #error-message {
@@ -97,20 +99,15 @@
             border: 1px solid var(--error-red);
             margin-bottom: 20px;
             font-size: 0.85rem;
-            display: none; 
+            /* PHP logic to show/hide based on session */
+            display: <?php echo isset($_SESSION['error']) ? 'block' : 'none'; ?>;
             text-align: center;
             font-weight: 600;
         }
 
         .form-group { margin-bottom: 20px; }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+        
         .form-group input {
             width: 100%;
             padding: 12px 15px;
@@ -118,12 +115,9 @@
             border-radius: 8px;
             font-size: 1rem;
             outline: none;
-            transition: 0.3s;
         }
 
-        .form-group input:focus { border-color: var(--primary-green); }
-
-        .login-btn {
+        .reg-btn {
             width: 100%;
             padding: 14px;
             background: var(--primary-green);
@@ -135,19 +129,11 @@
             cursor: pointer;
         }
 
-        .register-link {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.9rem;
-        }
+        .reg-btn:hover { background: #219150; }
 
-        .register-link a {
-            color: var(--primary-green);
-            text-decoration: none;
-            font-weight: bold;
-        }
+        .login-link { text-align: center; margin-top: 20px; font-size: 0.9rem; }
+        .login-link a { color: var(--primary-green); text-decoration: none; font-weight: bold; }
 
-        /* --- FOOTER --- */
         footer {
             background: #1a1a1a;
             color: white;
@@ -157,36 +143,53 @@
         }
     </style>
 </head>
+
 <body>
 
     <nav>
         <a href="../index.html" class="logo">DailyNeeds</a>
         <ul class="nav-links">
             <li><a href="products.html">Products</a></li>
-            <li><a href="login.html" style="color: var(--primary-green)">Login</a></li>
-            <li><a href="register.html" style="background: var(--primary-green); color: white; padding: 8px 18px; border-radius: 5px;">Register</a></li>
+            <li><a href="login.php">Login</a></li>
+            <li><a href="register.php" style="background: var(--primary-green); color: white; padding: 8px 18px; border-radius: 5px;">Register</a></li>
         </ul>
     </nav>
 
-    <div class="login-wrapper">
-        <div class="login-card">
-            <h2>Login</h2>
+    <div class="reg-wrapper">
+        <div class="reg-card">
+            <h2>Create Account</h2>
+            <p>Join the DailyNeeds family today!</p>
 
-            <div id="error-message"></div>
+            <div id="error-message">
+                <?php 
+                if (isset($_SESSION['error'])) {
+                    echo $_SESSION['error'];
+                    unset($_SESSION['error']); // Clear error after showing it once
+                }
+                ?>
+            </div>
 
-            <form id="loginForm">
+            <form id="registrationForm" method="POST" action="../controller/registrationControll.php">
+                <div class="form-group">
+                    <label for="fullname">Full Name</label>
+                    <input type="text" id="fullname" name="fullname" placeholder="John Doe">
+                </div>
+
                 <div class="form-group">
                     <label for="email">Email Address</label>
-                    <input type="email" id="email" placeholder="name@example.com">
+                    <input type="email" id="email" name="email" placeholder="name@example.com">
                 </div>
+
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Enter your password">
+                    <input type="password" id="password" name="password" placeholder="Create a password">
                 </div>
-                <button type="submit" class="login-btn">Sign In</button>
+
+                <button type="submit" class="reg-btn">Register Now</button>
             </form>
-            <div class="register-link">
-                Don't have an account? <a href="register.html">Register</a>
+
+            <div class="login-link">
+                Already have an account? <a href="login.php">Login</a>
             </div>
         </div>
     </div>
@@ -196,44 +199,35 @@
     </footer>
 
     <script>
-        const loginForm = document.getElementById('loginForm');
+        const form = document.getElementById('registrationForm');
         const errorDiv = document.getElementById('error-message');
 
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            // Clear previous errors
-            errorDiv.style.display = 'none';
-            errorDiv.innerHTML = '';
-
+        form.addEventListener('submit', function (e) {
+            // JS handles instant validation
+            const name = document.getElementById('fullname').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
 
-            let errorText = "";
+            let errorMessage = "";
 
-            // Validation logic
-            if (email === "") {
-                errorText = "Email address is required.";
+            if (name === "") {
+                errorMessage = "Full Name is required.";
+            } else if (name.length < 3) {
+                errorMessage = "Name must be at least 3 characters.";
             } else if (!email.match(emailPattern)) {
-                errorText = "Please enter a valid email address.";
-            } else if (password === "") {
-                errorText = "Password is required.";
+                errorMessage = "Please enter a valid email address.";
             } else if (password.length < 6) {
-                errorText = "Password must be at least 6 characters.";
+                errorMessage = "Password must be at least 6 characters.";
             }
 
-            if (errorText !== "") {
-                // Show error
-                errorDiv.innerHTML = errorText;
+            if (errorMessage !== "") {
+                // If JS validation fails, stop the form and show the error
+                e.preventDefault(); 
+                errorDiv.innerHTML = errorMessage;
                 errorDiv.style.display = 'block';
-            } else {
-                // Success - Redirect to dashboard
-                alert("Login Successful!");
-                window.location.href = "dashboard.html";
             }
         });
     </script>
-
 </body>
 </html>

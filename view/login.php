@@ -1,11 +1,14 @@
+<?php 
+// 1. Start the session to catch errors from the controller
+session_start(); 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register | DailyNeeds</title>
+    <title>Login | DailyNeeds</title>
     <style>
-        /* CSS Variables */
         :root {
             --primary-green: #27ae60;
             --dark-text: #2c3e50;
@@ -29,7 +32,7 @@
             min-height: 100vh;
         }
 
-        /* --- HEADER --- */
+        /* --- NAVBAR --- */
         nav {
             display: flex;
             justify-content: space-between;
@@ -57,23 +60,18 @@
         }
 
         .nav-links li { margin-left: 25px; }
+        .nav-links a { text-decoration: none; color: var(--dark-text); font-weight: 500; }
 
-        .nav-links a {
-            text-decoration: none;
-            color: var(--dark-text);
-            font-weight: 500;
-        }
-
-        /* --- FORM SECTION --- */
-        .reg-wrapper {
-            flex: 1; 
+        /* --- LOGIN FORM SECTION --- */
+        .login-wrapper {
+            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 40px 20px;
         }
 
-        .reg-card {
+        .login-card {
             background: var(--white);
             padding: 40px;
             border-radius: 12px;
@@ -82,8 +80,7 @@
             max-width: 400px;
         }
 
-        .reg-card h2 { text-align: center; margin-bottom: 10px; }
-        .reg-card p { text-align: center; color: #777; margin-bottom: 20px; font-size: 0.9rem; }
+        .login-card h2 { text-align: center; margin-bottom: 20px; font-size: 1.8rem; }
 
         /* --- ERROR MESSAGE DIV --- */
         #error-message {
@@ -94,14 +91,14 @@
             border: 1px solid var(--error-red);
             margin-bottom: 20px;
             font-size: 0.85rem;
-            display: none; /* Hidden by default */
             text-align: center;
             font-weight: 600;
+            /* Show automatically if PHP session error exists */
+            display: <?php echo isset($_SESSION['error']) ? 'block' : 'none'; ?>;
         }
 
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
-        
         .form-group input {
             width: 100%;
             padding: 12px 15px;
@@ -110,8 +107,9 @@
             font-size: 1rem;
             outline: none;
         }
+        .form-group input:focus { border-color: var(--primary-green); }
 
-        .reg-btn {
+        .login-btn {
             width: 100%;
             padding: 14px;
             background: var(--primary-green);
@@ -123,12 +121,9 @@
             cursor: pointer;
         }
 
-        .reg-btn:hover { background: #219150; }
+        .register-link { text-align: center; margin-top: 20px; font-size: 0.9rem; }
+        .register-link a { color: var(--primary-green); text-decoration: none; font-weight: bold; }
 
-        .login-link { text-align: center; margin-top: 20px; font-size: 0.9rem; }
-        .login-link a { color: var(--primary-green); text-decoration: none; font-weight: bold; }
-
-        /* --- FOOTER --- */
         footer {
             background: #1a1a1a;
             color: white;
@@ -144,39 +139,37 @@
         <a href="../index.html" class="logo">DailyNeeds</a>
         <ul class="nav-links">
             <li><a href="products.html">Products</a></li>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="register.html" style="background: var(--primary-green); color: white; padding: 8px 18px; border-radius: 5px;">Register</a></li>
+            <li><a href="login.php" style="color: var(--primary-green)">Login</a></li>
+            <li><a href="register.php" style="background: var(--primary-green); color: white; padding: 8px 18px; border-radius: 5px;">Register</a></li>
         </ul>
     </nav>
 
-    <div class="reg-wrapper">
-        <div class="reg-card">
-            <h2>Create Account</h2>
-            <p>Join the DailyNeeds family today!</p>
-            
-            <div id="error-message"></div>
+    <div class="login-wrapper">
+        <div class="login-card">
+            <h2>Login</h2>
 
-            <form id="registrationForm">
-                <div class="form-group">
-                    <label for="fullname">Full Name</label>
-                    <input type="text" id="fullname" placeholder="John Doe">
-                </div>
+            <div id="error-message">
+                <?php 
+                if (isset($_SESSION['error'])) {
+                    echo $_SESSION['error'];
+                    unset($_SESSION['error']); // Clear after displaying
+                }
+                ?>
+            </div>
 
+            <form id="loginForm" method="POST" action="../controller/loginCheck.php">
                 <div class="form-group">
                     <label for="email">Email Address</label>
-                    <input type="email" id="email" placeholder="name@example.com">
+                    <input type="email" id="email" name="email" placeholder="name@example.com">
                 </div>
-
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Create a password">
+                    <input type="password" id="password" name="password" placeholder="Enter your password">
                 </div>
-
-                <button type="submit" class="reg-btn">Register Now</button>
+                <button type="submit" class="login-btn">Sign In</button>
             </form>
-
-            <div class="login-link">
-                Already have an account? <a href="login.html">Login</a>
+            <div class="register-link">
+                Don't have an account? <a href="register.php">Register</a>
             </div>
         </div>
     </div>
@@ -186,42 +179,36 @@
     </footer>
 
     <script>
-        const form = document.getElementById('registrationForm');
+        const loginForm = document.getElementById('loginForm');
         const errorDiv = document.getElementById('error-message');
 
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Clear previous errors
+        loginForm.addEventListener('submit', function(e) {
+            // Reset UI
             errorDiv.style.display = 'none';
             errorDiv.innerHTML = '';
 
-            const name = document.getElementById('fullname').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
 
-            let errorMessage = "";
+            let errorText = "";
 
-            // Validation Logic
-            if (name === "") {
-                errorMessage = "Full Name is required.";
-            } else if (name.length < 3) {
-                errorMessage = "Name must be at least 3 characters.";
+            // Client-side Validation logic
+            if (email === "") {
+                errorText = "Email address is required.";
             } else if (!email.match(emailPattern)) {
-                errorMessage = "Please enter a valid email address.";
+                errorText = "Please enter a valid email address.";
+            } else if (password === "") {
+                errorText = "Password is required.";
             } else if (password.length < 6) {
-                errorMessage = "Password must be at least 6 characters.";
+                errorText = "Password must be at least 6 characters.";
             }
 
-            // Display error if exists
-            if (errorMessage !== "") {
-                errorDiv.innerHTML = errorMessage;
+            if (errorText !== "") {
+                // Prevent form submission if JS finds errors
+                e.preventDefault();
+                errorDiv.innerHTML = errorText;
                 errorDiv.style.display = 'block';
-            } else {
-                // Success
-                alert("Registration Successful!");
-                window.location.href = "login.html";
             }
         });
     </script>
