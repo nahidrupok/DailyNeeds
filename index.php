@@ -85,10 +85,72 @@ session_start();
             <div class="product-card">
                 <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80" alt="Fresh Oranges">
                 <h3>Organic Oranges</h3>
-                <span class="price">$4.99 / kg</span>
+                
+            </div>  
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=400&q=80" alt="Green Vegetables">
+                <h3>Fresh Spinach</h3>
+                
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1523472721958-978152f4d69b?auto=format&fit=crop&w=400&q=80" alt="Dairy">
+                <h3>Farm Fresh Milk</h3>
+                
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=400&q=80" alt="Grain">
+                <h3>Whole Grain Bread</h3>
+                
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80" alt="Fresh Oranges">
+                <h3>Organic Oranges</h3>
+                
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=400&q=80" alt="Green Vegetables">
+                <h3>Fresh Spinach</h3>
+                
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1523472721958-978152f4d69b?auto=format&fit=crop&w=400&q=80" alt="Dairy">
+                <h3>Farm Fresh Milk</h3>
+                
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=400&q=80" alt="Fresh Oranges">
+                <h3>Organic Oranges</h3>
+                
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=400&q=80" alt="Green Vegetables">
+                <h3>Fresh Spinach</h3>
+                <span class="price">$2.50 / bunch</span>
                 <button class="add-btn">Add to Cart</button>
             </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1523472721958-978152f4d69b?auto=format&fit=crop&w=400&q=80" alt="Dairy">
+                <h3>Farm Fresh Milk</h3>
+                <span class="price">$3.20 / L</span>
+                <button class="add-btn">Add to Cart</button>
             </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=400&q=80" alt="Grain">
+                <h3>Whole Grain Bread</h3>
+                <span class="price">$1.80 / pack</span>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+        </div>
     </main>
 
     <footer>
