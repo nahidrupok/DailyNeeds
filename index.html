@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Home Page</title>
+    <style>
+        /* CSS - Styling the Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: #1a1a1a;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffcc00;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ffcc00;
+        }
+
+        /* Hero Section (Banner) */
+        .hero {
+            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background: #ffcc00;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 50px;
+        }
+
+        .footer-links {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            margin: 0 10px;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">BRAND.</div>
+        <ul class="nav-links">
+            <li><a href="#" onclick="showAlert('Products')">Products</a></li>
+            <li><a href="#" onclick="showAlert('Login')">Login</a></li>
+            <li><a href="#" onclick="showAlert('Registration')">Registration</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <h1>Experience Innovation</h1>
+        <p>Premium solutions for your daily professional workflow.</p>
+        <button class="btn" id="cta-button">Explore Now</button>
+    </header>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact Us</a>
+        </div>
+        <p>&copy; 2026 Your Company Name. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // JS - Adding Interactivity
+        
+        // 1. Alert for Nav Links
+        function showAlert(page) {
+            alert("Redirecting to the " + page + " page...");
+        }
+
+        // 2. Interaction for the Hero Button
+        const ctaBtn = document.getElementById('cta-button');
+        ctaBtn.addEventListener('click', () => {
+            ctaBtn.innerText = "Loading...";
+            setTimeout(() => {
+                alert("Welcome! Let's get started.");
+                ctaBtn.innerText = "Explore Now";
+            }, 1000);
+        });
+    </script>
+
+</body>
+</html>
