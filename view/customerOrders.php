@@ -28,7 +28,6 @@
             min-height: 100vh;
         }
 
-        /* --- HEADER --- */
         nav {
             display: flex;
             justify-content: space-between;
@@ -46,7 +45,6 @@
             text-decoration: none;
         }
 
-        /* --- DASHBOARD LAYOUT --- */
         .dashboard-container {
             display: flex;
             flex: 1;
@@ -98,10 +96,9 @@
             border-bottom: 2px solid var(--light-bg);
         }
 
-        /* --- ORDERS TABLE STYLING --- */
         .table-container {
             width: 100%;
-            overflow-x: auto; /* Scroll on small screens */
+            overflow-x: auto; 
         }
 
         table {
@@ -141,7 +138,6 @@
         .status.pending { background: #fff9e6; color: #f1c40f; }
         .status.shipped { background: #e6f7ff; color: #3498db; }
 
-        /* --- FOOTER --- */
         footer {
             background: #1a1a1a;
             color: white;

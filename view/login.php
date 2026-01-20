@@ -1,5 +1,4 @@
 <?php 
-// 1. Start the session to catch errors from the controller
 session_start(); 
 ?>
 <!DOCTYPE html>
@@ -32,7 +31,6 @@ session_start();
             min-height: 100vh;
         }
 
-        
         nav {
             display: flex;
             justify-content: space-between;
@@ -152,7 +150,6 @@ session_start();
                     unset($_SESSION['error']); }
                 ?>
             </div>
-
             <form id="loginForm" method="POST" action="../controller/loginCheck.php">
                 <div class="form-group">
                     <label for="email">Email Address</label>
@@ -179,7 +176,6 @@ session_start();
         const errorDiv = document.getElementById('error-message');
 
         loginForm.addEventListener('submit', function(e) {
-            
             errorDiv.style.display = 'none';
             errorDiv.innerHTML = '';
 
@@ -189,7 +185,6 @@ session_start();
 
             let errorText = "";
 
-            
             if (email === "") {
                 errorText = "Email address is required.";
             } else if (!email.match(emailPattern)) {

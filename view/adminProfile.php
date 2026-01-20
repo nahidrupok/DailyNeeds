@@ -1,144 +1,169 @@
 <?php
 session_start();
 
-// 1. Protection
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header("Location: login.php");
     exit();
 }
 
-// 2. Data from session
-$userName   = $_SESSION['user_name'];
-$userEmail  = $_SESSION['user_email'];
-$userRole   = $_SESSION['user_role'];
+$userName  = $_SESSION['user_name'];
+$userEmail = $_SESSION['user_email'];
+$userRole  = $_SESSION['user_role'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile | DailyNeeds</title>
+    <title>Dashboard | DailyNeeds</title>
     <style>
         :root {
-            --green: #27ae60;
-            --text: #333;
-            --border: #eee;
+            --primary-green: #27ae60;
+            --dark-text: #2c3e50;
+            --light-bg: #f9f9f9;
+            --white: #ffffff;
+            --border: #e0e0e0;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
             display: flex;
-            color: var(--text);
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        /* Slim Sidebar */
-        .sidebar {
-            width: 200px;
-            height: 100vh;
-            border-right: 1px solid var(--border);
-            padding-top: 30px;
-            position: fixed;
+        /* --- HEADER --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 8%;
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
         }
 
         .logo {
-            padding: 0 25px;
-            font-size: 1.4rem;
+            font-size: 1.8rem;
             font-weight: 800;
-            color: var(--green);
+            color: var(--primary-green);
             text-decoration: none;
-            display: block;
-            margin-bottom: 40px;
         }
 
-        .sidebar-menu a {
-            display: block;
-            padding: 12px 25px;
-            text-decoration: none;
-            color: #666;
-            font-size: 14px;
-        }
-
-        .sidebar-menu a.active {
-            color: var(--green);
-            font-weight: 600;
-            background: #f9f9f9;
-        }
-
-        /* Main Content */
-        .main {
-            margin-left: 200px;
-            flex: 1;
-            padding: 60px;
-        }
-
-        .header h1 { 
-            font-size: 22px; 
-            margin-bottom: 40px; 
-        }
-
-        /* Simple Info List */
-        .info-item {
+        /* --- DASHBOARD LAYOUT --- */
+        .dashboard-container {
             display: flex;
-            padding: 15px 0;
-            border-bottom: 1px solid var(--border);
-            max-width: 500px;
+            flex: 1;
+            width: 100%;
         }
 
-        .label {
-            width: 140px;
-            font-weight: 700;
-            color: #888;
-            font-size: 13px;
+        .sidebar {
+            width: 250px;
+            background: var(--white);
+            border-right: 1px solid var(--border);
+            padding: 20px 0;
         }
 
-        .value {
-            font-size: 15px;
+        .sidebar-menu { list-style: none; }
+
+        .sidebar-menu li a {
+            display: block;
+            padding: 15px 30px;
+            color: var(--dark-text);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-menu li a:hover, .sidebar-menu li a.active {
+            background: #f0fdf4;
+            color: var(--primary-green);
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .main-content { flex: 1; padding: 40px; }
+
+        .content-card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .content-card h2 {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-bg);
+        }
+
+        .content-card p { margin-bottom: 10px; font-size: 1.1rem; }
+
+        footer {
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
         }
 
         .logout-btn {
-            margin-top: 40px;
-            display: inline-block;
-            color: #e74c3c;
             text-decoration: none;
-            font-size: 14px;
+            color: #e74c3c;
+            font-weight: 600;
+            padding: 8px 15px;
+            border: 1px solid #e74c3c;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #e74c3c;
+            color: white;
         }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <a href="#" class="logo">DailyNeeds</a>
-        <div class="sidebar-menu">
-            <a href="#" class="active">UserProfile</a>
-            <a href="allUsers.php">All Users</a>
-            <a href="allOrders.php">All Orders</a>
+    <nav>
+        <a href="customerProfile.php" class="logo">DailyNeeds</a>
+        <div class="nav-links">
+            <a href="../controller/logoutControll.php" class="logout-btn">Logout</a>
         </div>
+    </nav>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="./adminProfile.php" class="active">Profile</a></li>
+                <li><a href="./allUsers.php">All Users</a></li>
+                <li><a href="./addProduct.php">Add Products</a></li>
+                <li><a href="./allProducts.php">All Products</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="content-card">
+                <h2>Welcome, <?php echo htmlspecialchars($userName); ?>!</h2>
+                <p><strong>Name:</strong> <?php echo htmlspecialchars($userName); ?></p>
+                <p><strong>Email:</strong> <?php echo htmlspecialchars($userEmail); ?></p>
+                <p><strong>Account Type:</strong> <?php echo ucfirst(htmlspecialchars($userRole)); ?></p>
+            </div>
+        </main>
+
     </div>
 
-    <main class="main">
-        <div class="header">
-            <h1>Account Details</h1>
-        </div>
-
-        <div class="info-item">
-            <div class="label">NAME</div>
-            <div class="value"><?php echo htmlspecialchars($userName); ?></div>
-        </div>
-
-        <div class="info-item">
-            <div class="label">EMAIL</div>
-            <div class="value"><?php echo htmlspecialchars($userEmail); ?></div>
-        </div>
-
-        <div class="info-item">
-            <div class="label">ACCOUNT TYPE</div>
-            <div class="value"><?php echo ucfirst(htmlspecialchars($userRole)); ?></div>
-        </div>
-
-        <a href="../controller/logoutControll.php" class="logout-btn">Logout</a>
-    </main>
+    <footer>
+        <p>&copy; 2026 DailyNeeds Grocery Delivery. Locally Sourced.</p>
+    </footer>
 
 </body>
 </html>

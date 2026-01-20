@@ -1,10 +1,28 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    header("Location: login.php");
+    exit();
+}
+
+$userName  = $_SESSION['user_name'];
+$userRole  = $_SESSION['user_role'];
+
+// Placeholder for database data - in a real app, you'd fetch this with mysqli_query
+$users = [
+    ['id' => 1, 'name' => 'John Doe', 'email' => 'john@example.com', 'role' => 'customer', 'status' => 'active', 'created_at' => '2026-01-10'],
+    ['id' => 2, 'name' => 'Jane Smith', 'email' => 'jane@example.com', 'role' => 'admin', 'status' => 'locked', 'created_at' => '2026-01-12'],
+];
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Users | DailyNeeds Admin</title>
+    <title>All Users | DailyNeeds</title>
     <style>
+        /* --- KEEPING YOUR EXISTING STYLES --- */
         :root {
             --primary-green: #27ae60;
             --dark-text: #2c3e50;
@@ -14,287 +32,118 @@
             --danger: #e74c3c;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--light-bg); color: var(--dark-text); display: flex; flex-direction: column; min-height: 100vh; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 8%; background: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .logo { font-size: 1.8rem; font-weight: 800; color: var(--primary-green); text-decoration: none; }
+        .dashboard-container { display: flex; flex: 1; width: 100%; }
+        .sidebar { width: 250px; background: var(--white); border-right: 1px solid var(--border); padding: 20px 0; }
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li a { display: block; padding: 15px 30px; color: var(--dark-text); text-decoration: none; font-weight: 600; border-left: 4px solid transparent; }
+        .sidebar-menu li a:hover, .sidebar-menu li a.active { background: #f0fdf4; color: var(--primary-green); border-left: 4px solid var(--primary-green); }
+        .main-content { flex: 1; padding: 40px; }
+        .content-card { background: var(--white); padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
 
-        body {
-            background-color: var(--light-bg);
-            color: var(--dark-text);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+        /* --- TABLE STYLES --- */
+        .user-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .user-table th, .user-table td { text-align: left; padding: 15px; border-bottom: 1px solid var(--border); }
+        .user-table th { background-color: #f8f9fa; font-weight: 700; }
 
-        /* --- HEADER --- */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 8%;
-            background: var(--white);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary-green);
-            text-decoration: none;
-        }
-
-        /* --- DASHBOARD LAYOUT --- */
-        .dashboard-container {
-            display: flex;
-            flex: 1;
-            width: 100%;
-        }
-
-        /* LEFT SIDEBAR */
-        .sidebar {
-            width: 250px;
-            background: var(--white);
-            border-right: 1px solid var(--border);
-            padding: 20px 0;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-        }
-
-        .sidebar-menu li a {
-            display: block;
-            padding: 15px 30px;
-            color: var(--dark-text);
-            text-decoration: none;
-            font-weight: 600;
-            transition: 0.3s;
-            border-left: 4px solid transparent;
-        }
-
-        .sidebar-menu li a:hover, .sidebar-menu li a.active {
-            background: #f0fdf4;
-            color: var(--primary-green);
-            border-left: 4px solid var(--primary-green);
-        }
-
-        /* MAIN CONTENT AREA */
-        .main-content {
-            flex: 1;
-            padding: 40px;
-        }
-
-        .content-card {
-            background: var(--white);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .content-card h2 {
-            margin-bottom: 25px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--light-bg);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* --- USER TABLE STYLING --- */
-        .table-container {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-
-        th, td {
-            padding: 15px;
-            border-bottom: 1px solid var(--border);
-            vertical-align: middle;
-        }
-
-        th {
-            background-color: var(--light-bg);
-            font-weight: 700;
-            font-size: 0.8rem;
-            color: #7f8c8d;
-            text-transform: uppercase;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .user-avatar {
-            width: 35px;
-            height: 35px;
-            background: #eee;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #777;
-        }
-
-        .status-badge {
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .status-active { background: #e6f7ed; color: #27ae60; }
-        .status-pending { background: #fff4e6; color: #f39c12; }
-
-        .action-btn {
-            background: transparent;
-            border: 1px solid var(--border);
-            padding: 5px 10px;
+        /* --- DROPDOWN STYLING --- */
+        .status-select {
+            padding: 6px 10px;
             border-radius: 4px;
+            border: 1px solid var(--border);
+            font-size: 0.9rem;
+            outline: none;
             cursor: pointer;
-            font-size: 0.8rem;
             transition: 0.2s;
         }
+        .status-select:focus { border-color: var(--primary-green); }
 
-        .action-btn:hover {
-            background: var(--light-bg);
-            border-color: #ccc;
-        }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+        .active-badge { background: #d4edda; color: #155724; }
+        .locked-badge { background: #f8d7da; color: #721c24; }
 
-        .delete-text {
-            color: var(--danger);
-            margin-left: 10px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        /* --- FOOTER --- */
-        footer {
-            background: #1a1a1a;
-            color: white;
-            text-align: center;
-            padding: 1.5rem 0;
-            margin-top: auto;
-        }
+        .logout-btn { text-decoration: none; color: var(--danger); font-weight: 600; padding: 8px 15px; border: 1px solid var(--danger); border-radius: 5px; }
+        footer { background: #1a1a1a; color: white; text-align: center; padding: 2rem 0; margin-top: auto; }
     </style>
 </head>
 <body>
 
     <nav>
-        <a href="admin_dashboard.html" class="logo">DailyNeeds Admin</a>
+        <a href="customerProfile.php" class="logo">DailyNeeds</a>
         <div class="nav-links">
-            <a href="login.html" style="text-decoration: none; color: var(--dark-text); font-weight: 500;">Logout</a>
+            <a href="../controller/logoutControll.php" class="logout-btn">Logout</a>
         </div>
     </nav>
 
     <div class="dashboard-container">
-        
         <aside class="sidebar">
             <ul class="sidebar-menu">
-                <li><a href="user_profile.html">Profile</a></li>
-                <li><a href="all_users.html" class="active">All Users</a></li>
-                <li><a href="all_orders.html">All Orders</a></li>
+                <li><a href="./adminProfile.php">Profile</a></li>
+                <li><a href="./allUsers.php" class="active">All Users</a></li>
+                <li><a href="./addProduct.php">Add Products</a></li>
+                <li><a href="./allProducts.php">All Products</a></li>
             </ul>
         </aside>
 
         <main class="main-content">
             <div class="content-card">
-                <h2> Registered Users <span>Total: 3</span></h2>
-                
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>User ID</th>
-                                <th>Name & Email</th>
-                                <th>Phone</th>
-                                <th>Join Date</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>#U-501</td>
-                                <td>
-                                    <div class="user-info">
-                                        <div class="user-avatar">RH</div>
-                                        <div>
-                                            <strong>Rakibul Hasan</strong><br>
-                                            <small style="color: #888;">rakib@email.com</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>01712-345678</td>
-                                <td>12 Jan 2026</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                                <td>
-                                    <button class="action-btn">Edit</button>
-                                    <span class="delete-text">Remove</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#U-502</td>
-                                <td>
-                                    <div class="user-info">
-                                        <div class="user-avatar">SN</div>
-                                        <div>
-                                            <strong>Sadiya Nasrin</strong><br>
-                                            <small style="color: #888;">sadiya@email.com</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>01911-987654</td>
-                                <td>15 Jan 2026</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                                <td>
-                                    <button class="action-btn">Edit</button>
-                                    <span class="delete-text">Remove</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>#U-503</td>
-                                <td>
-                                    <div class="user-info">
-                                        <div class="user-avatar">TA</div>
-                                        <div>
-                                            <strong>Tanvir Ahmed</strong><br>
-                                            <small style="color: #888;">tanvir@email.com</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>01552-112233</td>
-                                <td>18 Jan 2026</td>
-                                <td><span class="status-badge status-pending">Pending</span></td>
-                                <td>
-                                    <button class="action-btn">Edit</button>
-                                    <span class="delete-text">Remove</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <h2>User Management</h2>
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($users as $user): ?>
+                        <tr>
+                            <td><?php echo $user['id']; ?></td>
+                            <td><?php echo htmlspecialchars($user['name']); ?></td>
+                            <td><?php echo htmlspecialchars($user['email']); ?></td>
+                            <td><?php echo ucfirst($user['role']); ?></td>
+                            <td>
+                                <span class="badge <?php echo ($user['status'] == 'active') ? 'active-badge' : 'locked-badge'; ?>">
+                                    <?php echo ucfirst($user['status']); ?>
+                                </span>
+                            </td>
+                            <td>
+                                <select class="status-select" onchange="updateStatus(<?php echo $user['id']; ?>, this.value)">
+                                    <option value="active" <?php echo ($user['status'] == 'active') ? 'selected' : ''; ?>>Unlock</option>
+                                    <option value="locked" <?php echo ($user['status'] == 'locked') ? 'selected' : ''; ?>>Lock</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
         </main>
-
     </div>
 
     <footer>
-        <p>&copy; 2026 DailyNeeds Admin Panel. Control Center.</p>
+        <p>&copy; 2026 DailyNeeds Grocery Delivery. Locally Sourced.</p>
     </footer>
 
+    <script>
+        function updateStatus(userId, status) {
+            if(confirm("Are you sure you want to " + (status === 'locked' ? 'LOCK' : 'UNLOCK') + " this user?")) {
+                // Here you would typically use fetch() or AJAX to send data to a PHP controller
+                console.log("Updating User " + userId + " to " + status);
+                
+                // Example: window.location.href = "../controller/updateUserStatus.php?id=" + userId + "&status=" + status;
+            } else {
+                // Reset dropdown if cancelled
+                location.reload();
+            }
+        }
+    </script>
 </body>
 </html>
