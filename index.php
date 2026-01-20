@@ -178,16 +178,16 @@
     <nav>
         <a href="#" class="logo">DailyNeeds</a>
         <ul class="nav-links">
-            <li><a href="./view/products.html">Products</a></li>
-            <li><a href="./view/login.html">Login</a></li>
-            <li><a href="./view/registration.html" style="background: var(--primary-green); color: white; padding: 8px 18px; border-radius: 5px;">Register</a></li>
+            <li><a href="./view/products.php">Products</a></li>
+            <li><a href="./view/login.php">Login</a></li>
+            <li><a href="./view/registration.php" style="background: var(--primary-green); color: white; padding: 8px 18px; border-radius: 5px;">Register</a></li>
         </ul>
     </nav>
 
     <header class="hero">
         <h1>Freshness at your doorstep</h1>
         <p>Get organic groceries delivered to DailyNeeds in 30 minutes.</p>
-        <a href="./view/products.html" class="btn-main">Shop Groceries Now</a>
+        <a href="./view/products.php" class="btn-main">Shop Groceries Now</a>
     </header>
 
     <main>

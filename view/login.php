@@ -32,7 +32,7 @@ session_start();
             min-height: 100vh;
         }
 
-        /* --- NAVBAR --- */
+        
         nav {
             display: flex;
             justify-content: space-between;
@@ -62,7 +62,6 @@ session_start();
         .nav-links li { margin-left: 25px; }
         .nav-links a { text-decoration: none; color: var(--dark-text); font-weight: 500; }
 
-        /* --- LOGIN FORM SECTION --- */
         .login-wrapper {
             flex: 1;
             display: flex;
@@ -82,7 +81,6 @@ session_start();
 
         .login-card h2 { text-align: center; margin-bottom: 20px; font-size: 1.8rem; }
 
-        /* --- ERROR MESSAGE DIV --- */
         #error-message {
             background-color: #fdeded;
             color: var(--error-red);
@@ -93,7 +91,6 @@ session_start();
             font-size: 0.85rem;
             text-align: center;
             font-weight: 600;
-            /* Show automatically if PHP session error exists */
             display: <?php echo isset($_SESSION['error']) ? 'block' : 'none'; ?>;
         }
 
@@ -136,9 +133,9 @@ session_start();
 <body>
 
     <nav>
-        <a href="../index.html" class="logo">DailyNeeds</a>
+        <a href="../index.php" class="logo">DailyNeeds</a>
         <ul class="nav-links">
-            <li><a href="products.html">Products</a></li>
+            <li><a href="products.php">Products</a></li>
             <li><a href="login.php" style="color: var(--primary-green)">Login</a></li>
             <li><a href="register.php" style="background: var(--primary-green); color: white; padding: 8px 18px; border-radius: 5px;">Register</a></li>
         </ul>
@@ -152,8 +149,7 @@ session_start();
                 <?php 
                 if (isset($_SESSION['error'])) {
                     echo $_SESSION['error'];
-                    unset($_SESSION['error']); // Clear after displaying
-                }
+                    unset($_SESSION['error']); 
                 ?>
             </div>
 
@@ -183,7 +179,7 @@ session_start();
         const errorDiv = document.getElementById('error-message');
 
         loginForm.addEventListener('submit', function(e) {
-            // Reset UI
+            
             errorDiv.style.display = 'none';
             errorDiv.innerHTML = '';
 
@@ -193,7 +189,7 @@ session_start();
 
             let errorText = "";
 
-            // Client-side Validation logic
+            
             if (email === "") {
                 errorText = "Email address is required.";
             } else if (!email.match(emailPattern)) {
@@ -205,7 +201,6 @@ session_start();
             }
 
             if (errorText !== "") {
-                // Prevent form submission if JS finds errors
                 e.preventDefault();
                 errorDiv.innerHTML = errorText;
                 errorDiv.style.display = 'block';
