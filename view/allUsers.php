@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once '../model/users.php';
 
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header("Location: login.php");
@@ -9,11 +10,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 $userName  = $_SESSION['user_name'];
 $userRole  = $_SESSION['user_role'];
 
-// Placeholder for database data - in a real app, you'd fetch this with mysqli_query
-$users = [
-    ['id' => 1, 'name' => 'John Doe', 'email' => 'john@example.com', 'role' => 'customer', 'status' => 'active', 'created_at' => '2026-01-10'],
-    ['id' => 2, 'name' => 'Jane Smith', 'email' => 'jane@example.com', 'role' => 'admin', 'status' => 'locked', 'created_at' => '2026-01-12'],
-];
+// 2. Fetch all users from the database using your function
+$usersResult = GetAllUsers(); 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +20,7 @@ $users = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Users | DailyNeeds</title>
     <style>
-        /* --- KEEPING YOUR EXISTING STYLES --- */
+        /* ... (Keep all your existing CSS here) ... */
         :root {
             --primary-green: #27ae60;
             --dark-text: #2c3e50;
@@ -43,28 +41,13 @@ $users = [
         .sidebar-menu li a:hover, .sidebar-menu li a.active { background: #f0fdf4; color: var(--primary-green); border-left: 4px solid var(--primary-green); }
         .main-content { flex: 1; padding: 40px; }
         .content-card { background: var(--white); padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-
-        /* --- TABLE STYLES --- */
         .user-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         .user-table th, .user-table td { text-align: left; padding: 15px; border-bottom: 1px solid var(--border); }
         .user-table th { background-color: #f8f9fa; font-weight: 700; }
-
-        /* --- DROPDOWN STYLING --- */
-        .status-select {
-            padding: 6px 10px;
-            border-radius: 4px;
-            border: 1px solid var(--border);
-            font-size: 0.9rem;
-            outline: none;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .status-select:focus { border-color: var(--primary-green); }
-
+        .status-select { padding: 6px 10px; border-radius: 4px; border: 1px solid var(--border); font-size: 0.9rem; outline: none; cursor: pointer; }
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
         .active-badge { background: #d4edda; color: #155724; }
         .locked-badge { background: #f8d7da; color: #721c24; }
-
         .logout-btn { text-decoration: none; color: var(--danger); font-weight: 600; padding: 8px 15px; border: 1px solid var(--danger); border-radius: 5px; }
         footer { background: #1a1a1a; color: white; text-align: center; padding: 2rem 0; margin-top: auto; }
     </style>
@@ -103,15 +86,19 @@ $users = [
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($users as $user): ?>
+                        <?php 
+                        // 3. Loop through the result set using mysqli_fetch_assoc
+                        if ($usersResult && mysqli_num_rows($usersResult) > 0):
+                            while ($user = mysqli_fetch_assoc($usersResult)): 
+                        ?>
                         <tr>
                             <td><?php echo $user['id']; ?></td>
                             <td><?php echo htmlspecialchars($user['name']); ?></td>
                             <td><?php echo htmlspecialchars($user['email']); ?></td>
-                            <td><?php echo ucfirst($user['role']); ?></td>
+                            <td><?php echo ucfirst(htmlspecialchars($user['role'])); ?></td>
                             <td>
                                 <span class="badge <?php echo ($user['status'] == 'active') ? 'active-badge' : 'locked-badge'; ?>">
-                                    <?php echo ucfirst($user['status']); ?>
+                                    <?php echo ucfirst(htmlspecialchars($user['status'])); ?>
                                 </span>
                             </td>
                             <td>
@@ -121,7 +108,14 @@ $users = [
                                 </select>
                             </td>
                         </tr>
-                        <?php endforeach; ?>
+                        <?php 
+                            endwhile; 
+                        else:
+                        ?>
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 20px;">No users found in database.</td>
+                        </tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -135,12 +129,9 @@ $users = [
     <script>
         function updateStatus(userId, status) {
             if(confirm("Are you sure you want to " + (status === 'locked' ? 'LOCK' : 'UNLOCK') + " this user?")) {
-                // Here you would typically use fetch() or AJAX to send data to a PHP controller
-                console.log("Updating User " + userId + " to " + status);
-                
-                // Example: window.location.href = "../controller/updateUserStatus.php?id=" + userId + "&status=" + status;
+                // To make this work, redirect to your controller
+                window.location.href = "../controller/updateUserStatus.php?id=" + userId + "&status=" + status;
             } else {
-                // Reset dropdown if cancelled
                 location.reload();
             }
         }

@@ -1,5 +1,8 @@
 <?php
 session_start();
+// 1. Include the database and model
+require_once '../model/database.php';
+require_once '../model/products.php';
 
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header("Location: login.php");
@@ -9,14 +12,27 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 $userName  = $_SESSION['user_name'];
 $userRole  = $_SESSION['user_role'];
 
-// LOGIC: In a real app, you would fetch the product details using the ID from the URL
-// Example: $productId = $_GET['id'];
-// $query = "SELECT * FROM products WHERE id = $productId";
-// For this design, we will use placeholder variables:
-$existingId = 1; 
-$existingName = "Organic Bananas";
-$existingCategory = "Fruits";
-$existingPrice = 2.99;
+// 2. GET THE ID FROM THE URL AND FETCH DATA
+if (isset($_GET['id'])) {
+    $existingId = $_GET['id'];
+    
+    // Call the function we created earlier
+    $product = GetProductById($existingId);
+
+    // If product doesn't exist, send back to list
+    if (!$product) {
+        header("Location: allProducts.php?error=not_found");
+        exit();
+    }
+
+    // Set variables from database
+    $existingName = $product['name'];
+    $existingCategory = $product['category'];
+    $existingPrice = $product['price'];
+} else {
+    header("Location: allProducts.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +41,6 @@ $existingPrice = 2.99;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Product | DailyNeeds</title>
     <style>
-        /* --- KEEPING CONSISTENT STYLES --- */
         :root {
             --primary-green: #27ae60;
             --primary-hover: #219150;
@@ -54,7 +69,6 @@ $existingPrice = 2.99;
         .content-card h2 { margin-bottom: 10px; color: var(--primary-green); }
         .content-card p { margin-bottom: 25px; color: #7f8c8d; font-size: 0.9rem; }
 
-        /* --- FORM STYLES --- */
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
         .form-group input, .form-group select {
@@ -110,7 +124,6 @@ $existingPrice = 2.99;
     </nav>
 
     <div class="dashboard-container">
-        
         <aside class="sidebar">
             <ul class="sidebar-menu">
                 <li><a href="customerProfile.php">Profile</a></li>
@@ -156,7 +169,6 @@ $existingPrice = 2.99;
                 </form>
             </div>
         </main>
-
     </div>
 
     <footer>
