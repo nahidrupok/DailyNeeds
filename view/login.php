@@ -89,6 +89,7 @@ session_start();
             font-size: 0.85rem;
             text-align: center;
             font-weight: 600;
+            /* Control visibility via PHP session */
             display: <?php echo isset($_SESSION['error']) ? 'block' : 'none'; ?>;
         }
 
@@ -148,8 +149,10 @@ session_start();
                 if (isset($_SESSION['error'])) {
                     echo $_SESSION['error'];
                     unset($_SESSION['error']); 
+                } // This brace was the fix!
                 ?>
             </div>
+
             <form id="loginForm" method="POST" action="../controller/loginCheck.php">
                 <div class="form-group">
                     <label for="email">Email Address</label>
