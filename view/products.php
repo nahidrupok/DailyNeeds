@@ -49,23 +49,29 @@ $demoImgBase = "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=f
 <body>
 
     <nav>
-        <a href="../index.php" class="logo">DailyNeeds</a>
-        <div class="nav-links">
-            <a href="products.php">Products</a>
-            
-            <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
-                <a href="customerProfile.php">
-                    Welcome, <span class="user-name"><?php echo htmlspecialchars($_SESSION['user_name']); ?></span>
-                </a>
-                <a href="../controller/logoutControll.php" class="logout-link">Logout</a>
-                <a href="./customerProfile.php" class="nav-links a">Dashboard</a>
+    <a href="../index.php" class="logo">DailyNeeds</a>
+    <div class="nav-links">
+        <a href="products.php">Products</a>
+        
+        <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
+            <span class="user-welcome">
+                Welcome, <span class="user-name"><?php echo htmlspecialchars($_SESSION['user_name']); ?></span>
+            </span>
 
+            <?php if ($_SESSION['user_role'] === 'admin'): ?>
+                <a href="adminProfile.php" class="nav-links a">Admin Panel</a>
             <?php else: ?>
-                <a href="login.php">Login</a>
-                <a href="register.php" style="background: #27ae60; color: white; padding: 8px 15px; border-radius: 5px;">Register</a>
+                <a href="customerProfile.php" class="nav-links a">Dashboard</a>
             <?php endif; ?>
-        </div>
-    </nav>
+
+            <a href="../controller/logoutControll.php" class="logout-link" style="color: #e74c3c;">Logout</a>
+
+        <?php else: ?>
+            <a href="login.php">Login</a>
+            <a href="register.php" style="background: #27ae60; color: white; padding: 8px 15px; border-radius: 5px;">Register</a>
+        <?php endif; ?>
+    </div>
+</nav>
 
     <?php if(isset($_GET['status'])): ?>
         <?php if($_GET['status'] == 'success'): ?>
