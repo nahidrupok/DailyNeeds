@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['logged_in'] = true;
 
         if ($result['role'] === 'admin') {
-            header("Location: ../view/admin_dashboard.php");
+            header("Location: ../view/adminProfile.php");
         } else {
             header("Location: ../view/customerProfile.php");
         }

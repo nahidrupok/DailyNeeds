@@ -143,10 +143,10 @@ $userRole  = $_SESSION['user_role'];
         
         <aside class="sidebar">
             <ul class="sidebar-menu">
-                <li><a href="#" class="active">Profile</a></li>
-                <li><a href="./customerOrders.php">Orders</a></li>
-                    <li><a href="../view/products.php">Shop More</a></li>
-
+                <li><a href="./adminProfile.php" class="active">Profile</a></li>
+                <li><a href="./allUsers.php">All Users</a></li>
+                <li><a href="./addProduct.php">Add Products</a></li>
+                <li><a href="./allProducts.php">All Products</a></li>
             </ul>
         </aside>
 

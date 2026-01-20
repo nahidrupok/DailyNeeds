@@ -136,7 +136,7 @@ session_start();
         <ul class="nav-links">
             <li><a href="products.php">Products</a></li>
             <li><a href="login.php" style="color: var(--primary-green)">Login</a></li>
-            <li><a href="register.php" style="background: var(--primary-green); color: white; padding: 8px 18px; border-radius: 5px;">Register</a></li>
+            <li><a href="registration.php" style="background: var(--primary-green); color: white; padding: 8px 18px; border-radius: 5px;">Register</a></li>
         </ul>
     </nav>
 
@@ -148,8 +148,7 @@ session_start();
                 <?php 
                 if (isset($_SESSION['error'])) {
                     echo $_SESSION['error'];
-                    unset($_SESSION['error']); 
-                } // This brace was the fix!
+                    unset($_SESSION['error']); }
                 ?>
             </div>
 

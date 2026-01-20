@@ -152,7 +152,7 @@
 <body>
 
     <nav>
-        <a href="../index.html" class="logo">DailyNeeds</a>
+        <a href="../index.php" class="logo">DailyNeeds</a>
         <div class="nav-links">
             <a href="login.html" style="text-decoration: none; color: var(--dark-text); font-weight: 500;">Logout</a>
         </div>

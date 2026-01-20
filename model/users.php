@@ -18,9 +18,6 @@ function InsertUser($fullName, $email, $pass)
     $status = 'active';
     $createdAt = date('Y-m-d H:i:s');
 
-    // 3. Proceed to Insert
-    // Note: It is best practice to wrap $pass in password_hash(), 
-    // but keeping it simple per your example.
     $query = "INSERT INTO users (name, email, password, role, status, created_at) 
               VALUES ('$fullName', '$email', '$pass', '$role', '$status', '$createdAt')";
 
@@ -56,6 +53,25 @@ function CheckUserLogin($email, $password) {
         }
     } else {
         return "user_not_found";
+    }
+}
+// all users
+function GetAllUsers() 
+{
+    global $conn;
+
+    // 1. Define the query to fetch all users
+    // We order by created_at DESC so the newest users appear at the top
+    $query = "SELECT id, name, email, password, role, status, created_at FROM users ORDER BY created_at DESC";
+
+    // 2. Execute the query
+    $result = mysqli_query($conn, $query);
+
+    // 3. Check if the query was successful
+    if ($result) {
+        return $result; // Returns the result set object
+    } else {
+        return false; // Returns false if there was a database error
     }
 }
 ?>
