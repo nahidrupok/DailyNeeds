@@ -2,7 +2,6 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-// 1. Import your database connection and product model
 require_once '../model/database.php';
 require_once '../model/products.php'; 
 
@@ -14,7 +13,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 $userName  = $_SESSION['user_name'];
 $userRole  = $_SESSION['user_role'];
 
-// 2. Fetch all products from the database
+
 $productsResult = GetAllProducts();
 ?>
 <!DOCTYPE html>
@@ -24,7 +23,6 @@ $productsResult = GetAllProducts();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Products | DailyNeeds</title>
     <style>
-        /* ... (Your existing CSS remains exactly the same) ... */
         :root {
             --primary-green: #27ae60;
             --dark-text: #2c3e50;
@@ -99,7 +97,6 @@ $productsResult = GetAllProducts();
                     </thead>
                     <tbody>
                         <?php 
-                        // 3. Loop through the database results
                         if ($productsResult && mysqli_num_rows($productsResult) > 0):
                             while ($product = mysqli_fetch_assoc($productsResult)): 
                         ?>

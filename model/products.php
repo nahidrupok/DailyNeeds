@@ -12,7 +12,6 @@ function AddProduct($pName, $category, $price)
     }
 
     
-    // 3. Execute Insert
     $query = "INSERT INTO products (name, category, price) 
               VALUES ('$pName', '$category', '$price')";
 
@@ -25,18 +24,14 @@ function AddProduct($pName, $category, $price)
     }
 }
 
-// all products
 function GetAllProducts() 
 {
     global $conn;
 
-    // 1. Define the query to fetch all products
     $query = "SELECT id, name, category, price FROM products ORDER BY id DESC";
 
-    // 2. Execute the query
     $result = mysqli_query($conn, $query);
 
-    // 3. Return the result set
     if ($result) {
         return $result;
     } else {
@@ -63,7 +58,6 @@ function UpdateProduct($id, $name, $category, $price) {
     return mysqli_query($conn, $query);
 }
 
-// create order 
 function CreateOrder($cusId, $cusName, $cusEmail, $proId, $proName, $proPrice) 
 {
     global $conn;
@@ -80,6 +74,17 @@ function CreateOrder($cusId, $cusName, $cusEmail, $proId, $proName, $proPrice)
     $result = mysqli_query($conn, $query);
 
     if ($result) {
+        return true;
+    } else {
+        return false;
+    }
+}
+function deleteProduct($id) {
+    global $conn;
+    $id = mysqli_real_escape_string($conn, $id); 
+    $sql = "DELETE FROM products WHERE id = $id";
+    
+    if (mysqli_query($conn, $sql)) {
         return true;
     } else {
         return false;

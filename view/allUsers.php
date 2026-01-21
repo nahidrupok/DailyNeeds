@@ -10,7 +10,6 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 $userName  = $_SESSION['user_name'];
 $userRole  = $_SESSION['user_role'];
 
-// 2. Fetch all users from the database using your function
 $usersResult = GetAllUsers(); 
 ?>
 <!DOCTYPE html>
@@ -20,7 +19,6 @@ $usersResult = GetAllUsers();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Users | DailyNeeds</title>
     <style>
-        /* ... (Keep all your existing CSS here) ... */
         :root {
             --primary-green: #27ae60;
             --dark-text: #2c3e50;
@@ -87,7 +85,6 @@ $usersResult = GetAllUsers();
                     </thead>
                     <tbody>
                         <?php 
-                        // 3. Loop through the result set using mysqli_fetch_assoc
                         if ($usersResult && mysqli_num_rows($usersResult) > 0):
                             while ($user = mysqli_fetch_assoc($usersResult)): 
                         ?>
@@ -129,7 +126,6 @@ $usersResult = GetAllUsers();
     <script>
         function updateStatus(userId, status) {
             if(confirm("Are you sure you want to " + (status === 'locked' ? 'LOCK' : 'UNLOCK') + " this user?")) {
-                // To make this work, redirect to your controller
                 window.location.href = "../controller/updateUserStatus.php?id=" + userId + "&status=" + status;
             } else {
                 location.reload();

@@ -89,7 +89,6 @@ session_start();
             font-size: 0.85rem;
             text-align: center;
             font-weight: 600;
-            /* Control visibility via PHP session */
             display: <?php echo isset($_SESSION['error']) ? 'block' : 'none'; ?>;
         }
 

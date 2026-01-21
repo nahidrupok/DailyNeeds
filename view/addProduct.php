@@ -16,7 +16,6 @@ $userRole  = $_SESSION['user_role'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Product | DailyNeeds</title>
     <style>
-        /* --- KEEPING YOUR EXISTING STYLES --- */
         :root {
             --primary-green: #27ae60;
             --primary-hover: #219150;
@@ -44,7 +43,6 @@ $userRole  = $_SESSION['user_role'];
         
         .content-card h2 { margin-bottom: 25px; padding-bottom: 10px; border-bottom: 2px solid var(--light-bg); color: var(--primary-green); }
 
-        /* --- FORM STYLES --- */
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95rem; }
         .form-group input, .form-group select {

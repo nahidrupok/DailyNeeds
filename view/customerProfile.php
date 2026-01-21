@@ -40,7 +40,6 @@ $userRole  = $_SESSION['user_role'];
             min-height: 100vh;
         }
 
-        /* --- HEADER --- */
         nav {
             display: flex;
             justify-content: space-between;
@@ -58,7 +57,6 @@ $userRole  = $_SESSION['user_role'];
             text-decoration: none;
         }
 
-        /* --- DASHBOARD LAYOUT --- */
         .dashboard-container {
             display: flex;
             flex: 1;

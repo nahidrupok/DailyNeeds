@@ -1,13 +1,11 @@
 <?php
 session_start();
 
-// 1. Check Login
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header("Location: login.php");
     exit();
 }
 
-// 2. Database Connection and Model
 require_once '../model/database.php';
 
 $current_cus_id = $_SESSION['user_id'];
@@ -51,7 +49,6 @@ $userRole  = $_SESSION['user_role'];
         .content-card { background: var(--white); padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .content-card h2 { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--light-bg); }
 
-        /* --- TABLE STYLING --- */
         .order-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         .order-table th, .order-table td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border); }
         .order-table th { background-color: #f8f9fa; color: var(--dark-text); font-weight: 600; }

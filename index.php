@@ -9,7 +9,6 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DailyNeeds | Fresh Groceries Delivered</title>
     <style>
-        /* Keep all your existing CSS here */
         :root {
             --primary-green: #27ae60;
             --dark-text: #2c3e50;
@@ -17,7 +16,6 @@ session_start();
             --white: #ffffff;
         }
 
-        /* ... including the rest of your styles ... */
         * {
             margin: 0;
             padding: 0;
@@ -172,7 +170,6 @@ session_start();
             text-decoration: none;
         }
 
-        /* New User Styling */
         .user-name {
             font-weight: bold;
             color: var(--primary-green);

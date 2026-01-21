@@ -1,6 +1,5 @@
 <?php
 session_start();
-// 1. Include the database and model
 require_once '../model/database.php';
 require_once '../model/products.php';
 
@@ -12,20 +11,16 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 $userName  = $_SESSION['user_name'];
 $userRole  = $_SESSION['user_role'];
 
-// 2. GET THE ID FROM THE URL AND FETCH DATA
 if (isset($_GET['id'])) {
     $existingId = $_GET['id'];
     
-    // Call the function we created earlier
     $product = GetProductById($existingId);
 
-    // If product doesn't exist, send back to list
     if (!$product) {
         header("Location: allProducts.php?error=not_found");
         exit();
     }
 
-    // Set variables from database
     $existingName = $product['name'];
     $existingCategory = $product['category'];
     $existingPrice = $product['price'];

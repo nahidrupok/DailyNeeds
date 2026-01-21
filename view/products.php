@@ -1,13 +1,10 @@
 <?php
 session_start();
-// 1. Include your database and models
 require_once '../model/database.php';
 require_once '../model/products.php'; 
 
-// 2. Fetch all products from the database
 $productsResult = GetAllProducts();
 
-// Demo image URL base
 $demoImgBase = "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=200&h=150";
 ?>
 <!DOCTYPE html>
@@ -26,7 +23,6 @@ $demoImgBase = "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=f
         .user-name { color: #27ae60; font-weight: bold; }
         .logout-link { color: #e74c3c !important; }
 
-        /* Status Messages */
         .alert { padding: 15px; text-align: center; font-weight: bold; margin: 0; }
         .alert-success { background: #d4edda; color: #155724; border-bottom: 1px solid #c3e6cb; }
         .alert-error { background: #f8d7da; color: #721c24; border-bottom: 1px solid #f5c6cb; }
@@ -74,9 +70,10 @@ $demoImgBase = "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=f
 </nav>
 
     <?php if(isset($_GET['status'])): ?>
-        <?php if($_GET['status'] == 'success'): ?>
+        <?php $status = htmlspecialchars($_GET['status']); ?>
+        <?php if($status == 'success'): ?>
             <div class="alert alert-success">Item added to your cart successfully!</div>
-        <?php elseif($_GET['status'] == 'error'): ?>
+        <?php elseif($status == 'error'): ?>
             <div class="alert alert-error">Something went wrong. Please try again.</div>
         <?php endif; ?>
     <?php endif; ?>
@@ -93,7 +90,7 @@ $demoImgBase = "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=f
                 while ($product = mysqli_fetch_assoc($productsResult)): 
                     $searchKeywords = strtolower($product['name'] . " " . $product['category']);
             ?>
-                <div class="card" data-name="<?php echo $searchKeywords; ?>">
+                <div class="card" data-name="<?php echo htmlspecialchars($searchKeywords); ?>">
                     <img src="<?php echo $demoImgBase; ?>" alt="Product" class="product-img">
                     
                     <span class="category-label"><?php echo htmlspecialchars($product['category']); ?></span>
@@ -101,9 +98,9 @@ $demoImgBase = "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=f
                     <span class="price">$<?php echo number_format($product['price'], 2); ?></span>
                     
                     <form method="POST" action="../controller/orderController.php">
-                        <input type="hidden" name="pro_id" value="<?php echo $product['id']; ?>">
-                        <input type="hidden" name="pro_name" value="<?php echo $product['name']; ?>">
-                        <input type="hidden" name="pro_price" value="<?php echo $product['price']; ?>">
+                        <input type="hidden" name="pro_id" value="<?php echo htmlspecialchars($product['id']); ?>">
+                        <input type="hidden" name="pro_name" value="<?php echo htmlspecialchars($product['name']); ?>">
+                        <input type="hidden" name="pro_price" value="<?php echo htmlspecialchars($product['price']); ?>">
                         <button type="submit" name="add_to_cart" class="btn">Add to Cart</button>
                     </form>
                 </div>
@@ -123,17 +120,17 @@ $demoImgBase = "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=f
 
     <script>
         function filterProducts() {
-            let input = document.getElementById('productSearch').value.toLowerCase();
-            let cards = document.getElementsByClassName('card');
+    let input = document.getElementById('productSearch').value;
+    let productGrid = document.getElementById('productGrid');
 
-            for (let i = 0; i < cards.length; i++) {
-                let name = cards[i].getAttribute('data-name');
-                if (name.includes(input)) {
-                    cards[i].style.display = "";
-                } else {
-                    cards[i].style.display = "none";
-                }
-            }
+    fetch('../controller/searchHandler.php?q=' + encodeURIComponent(input))
+        .then(response => response.text())
+        .then(data => {
+            productGrid.innerHTML = data;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
         }
     </script>
 
